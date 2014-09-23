@@ -125,7 +125,7 @@ public class TaskTelemetry extends TaskGeneral
                     telemetry.route = String.format(Locale.US, "%d:%d:%d", group_code, nariad_one.mr_id, nariad_one.direction);
                     telemetry.name = name;
                     telemetry.azimuth = unit.course;
-                    telemetry.handicapped = unit.inv == 0 ? false : true;
+                    telemetry.handicapped = unit.inv != 0;
                     telemetry.lat = unit.lat;
                     telemetry.lon = unit.lon;
                     telemetry.speed = unit.speed;
@@ -142,8 +142,10 @@ public class TaskTelemetry extends TaskGeneral
         }
         finally
         {
-            jedisPool.returnResource(redis);
-            log("telemetry.redis return in pool", 3);
+            if (redis.isConnected())
+            {
+                jedisPool.returnResource(redis);
+            }
         }
         log(String.format("insert keys in redis completed %d ms", System.currentTimeMillis() - t0), 2);
         t0 = System.currentTimeMillis();
@@ -153,13 +155,11 @@ public class TaskTelemetry extends TaskGeneral
         log(String.format(Locale.US, "publish in %s %d telemetry %d ms", name_topic, arrayTelemetry.size(), System.currentTimeMillis() - t0), 2);
         if (count_ts > 0)
         {
-            //log(String.format(Locale.US, "nagios Получено %d положений ТС за %d мс", count_ts, System.currentTimeMillis() - begin_update), 1);
             logger.info(MarkerFactory.getMarker("nagios"), String.format(Locale.US, "%s Получено %d положений ТС за %d мс", worker_name, count_ts, System.currentTimeMillis() - begin_update));
 
         }
         else
         {
-            //log(String.format(Locale.US, "nagios Отсутствует телеметрия, обработано за %d мс", System.currentTimeMillis() - begin_update),  0);
             logger.warn(MarkerFactory.getMarker("nagios"), String.format(Locale.US, "%s Отсутствует телеметрия, обработано за %d мс", worker_name, System.currentTimeMillis() - begin_update));
         }
     }
@@ -197,11 +197,11 @@ public class TaskTelemetry extends TaskGeneral
         }
         int sec = sys_time.getSecondOfMinute();
         Long delay = null;
-        for (int i = 0; i < start_sec.length; i++)
+        for (int i : start_sec)
         {
-            if (sec <= start_sec[i])
+            if (sec <= i)
             {
-                delay = (long) (start_sec[i] - sec) * 1000;
+                delay = (long) (i - sec) * 1000;
                 break;
             }
         }

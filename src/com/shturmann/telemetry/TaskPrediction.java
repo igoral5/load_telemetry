@@ -55,18 +55,15 @@ public class TaskPrediction extends TaskGeneral
                     URL url = new URL(part_url + "/getTableCur2.php?fmt=csv");
                     future_curtable = threadPool.submit(new URLParserCSVTask<>(curtable, url, this));
                 }
-                log("create future_curtable", 3);
                 curtable = future_curtable.get();
             }
             finally
             {
-                if (curtable != null)
+                if (curtable != null && curtable.redis.isConnected())
                 {
                     jedisPool.returnResource(curtable.redis);
-                    log("curtable.redis return in pool", 3);
                 }
             }
-            log("future_curtable complet", 3);
             log(String.format("request getTableCur2 completed %d ms", System.currentTimeMillis() - t0), 2);
         }
         else
@@ -99,15 +96,13 @@ public class TaskPrediction extends TaskGeneral
             }
             finally
             {
-                if (alltable != null)
+                if (alltable != null && alltable.redis.isConnected())
                 {
                     jedisPool.returnResource(alltable.redis);
-                    log("alltable.redis return in pool", 3);
                 }
-                if (curtable != null)
+                if (curtable != null && curtable.redis.isConnected())
                 {
                     jedisPool.returnResource(curtable.redis);
-                    log("curtable.redis return in pool", 3);
                 }
             }
             log(String.format("request getTableAll, getTableCur completed %d ms", System.currentTimeMillis() - t0), 2);
@@ -139,12 +134,10 @@ public class TaskPrediction extends TaskGeneral
         this.redis_keys = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
         if (post.isEmpty())
         {
-            //log(String.format(Locale.US, "nagios Отсутствуют прогнозы, обработано за %d мс", System.currentTimeMillis() - begin_update), 0);
             logger.warn(MarkerFactory.getMarker("nagios"), String.format(Locale.US, "%s Отсутствуют прогнозы, обработано за %d мс", worker_name, System.currentTimeMillis()- begin_update));
         }
         else
         {
-            //log(String.format(Locale.US, "nagios Получено %d прогнозов за %d мс", post.size(), System.currentTimeMillis() - begin_update), 1);
             logger.info(MarkerFactory.getMarker("nagios"), String.format(Locale.US, "%s Получено %d прогнозов за %d мс", worker_name, post.size(), System.currentTimeMillis() - begin_update));
         }
     }

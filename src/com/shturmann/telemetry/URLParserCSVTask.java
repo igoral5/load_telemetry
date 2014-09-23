@@ -1,7 +1,6 @@
 package com.shturmann.telemetry;
 
 import au.com.bytecode.opencsv.CSVReader;
-import org.xml.sax.InputSource;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -30,21 +29,16 @@ public class URLParserCSVTask<T extends XMLCSVHandler, S extends TaskGeneral> im
     public T call() throws IOException
     {
         long t0 = System.currentTimeMillis();
-        upTask.log(String.format("start [%s]", url.toString()), 3);
         final HttpURLConnection host = (HttpURLConnection) url.openConnection();
-        upTask.log(String.format("create HttpConnection [%s]", url.toString()), 3);
         if (url.getUserInfo() != null)
         {
             String basicAuth = "Basic " + new String(Base64.getEncoder().encode(url.getUserInfo().getBytes()));
             host.setRequestProperty("Authorization", basicAuth);
         }
         host.setRequestProperty("Accept-Encoding", "gzip");
-        upTask.log(String.format("set Request Property [%s]", url.toString()), 3);
         host.setConnectTimeout(Config.getInt(upTask.worker_name, "http-timeout", 120000));
         host.setReadTimeout(Config.getInt(upTask.worker_name, "read-timeout", 120000));
-        upTask.log(String.format("set timeout [%s]", url.toString()), 3);
         InputStream is = "gzip".equals(host.getContentEncoding()) ? new GZIPInputStream(host.getInputStream()) : host.getInputStream();
-        upTask.log(String.format("get InputStream [%s]", url.toString()), 3);
         CSVReader reader;
         if (Config.getInt(upTask.worker_name, "debug-time", 0) > 2)
         {

@@ -4,7 +4,6 @@ import com.hazelcast.core.HazelcastInstance;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.slf4j.MarkerFactory;
 import redis.clients.jedis.JedisPool;
 
@@ -77,7 +76,6 @@ abstract public class TaskGeneral extends TimerTask
                 log(String.format("request getSysInfo completed %d ms", System.currentTimeMillis() - begin_update), 2);
                 if (old_update == null || sysinfo.get_last_update().isAfter(old_update))
                 {
-                    log(String.format(Locale.US, "need update old_update=%s last_update=%s", (old_update == null) ? "null": old_update, sysinfo.get_last_update()), 3);
                     process_update();
                     old_update = sysinfo.get_last_update();
                     log(String.format("finish update %d ms", System.currentTimeMillis() - begin_update), 1);
@@ -96,7 +94,6 @@ abstract public class TaskGeneral extends TimerTask
         }
         catch (Exception e)
         {
-            //log(String.format(Locale.US, "nagios %s", e.getLocalizedMessage()), -1);
             logger.error(MarkerFactory.getMarker("nagios"), String.format(Locale.US, "%s %s", worker_name, e.getLocalizedMessage()), e);
         }
     }
