@@ -13,7 +13,7 @@
         <suffixPattern>%-5level %msg</suffixPattern>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>Telemetry.log</file>
         <append>true</append>
 
@@ -23,7 +23,8 @@
 
          <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>Telemetry-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>Telemetry-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <!-- keep 7 days' worth of history -->
             <maxHistory>7</maxHistory>
         </rollingPolicy>
 
