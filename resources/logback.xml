@@ -33,7 +33,7 @@
         </encoder>
     </appender>
 
-    <appender name="SMTP" class="ch.qos.logback.classic.net.SMTPAppender">
+    <!-- appender name="SMTP" class="ch.qos.logback.classic.net.SMTPAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -55,13 +55,13 @@
         </layout>
         <username>proekt</username>
         <password>KMlwelT5</password>
-    </appender>
+    </appender -->
 
     <root level="trace">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="SYSLOG"/>
         <appender-ref ref="FILE"/>
-        <appender-ref ref="SMTP"/>
+        <!-- appender-ref ref="SMTP"/ -->
     </root>
 
 </configuration>
