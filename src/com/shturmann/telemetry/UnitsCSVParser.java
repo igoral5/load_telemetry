@@ -2,10 +2,6 @@ package com.shturmann.telemetry;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.ArrayList;
 
 /**
  * Created by igor on 15.08.14.
@@ -35,6 +31,7 @@ public class UnitsCSVParser extends UnitsParser
         int u_speed = Integer.parseInt(line[10]);
         int u_course = Integer.parseInt(line[11]);
         int u_inv = Integer.parseInt(line[12]);
-        add(srv_id, uniqueid, tt_id, u_timenav, u_lat, u_long, u_speed, u_course, u_inv);
+
+        add(srv_id, uniqueid, tt_id, u_timenav, u_lat, u_long, u_speed, u_course, u_inv, line[4]);
     }
 }

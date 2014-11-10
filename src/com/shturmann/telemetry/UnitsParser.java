@@ -31,14 +31,15 @@ public class UnitsParser extends XMLCSVHandler
         units.clear();
     }
 
-    protected void add(int srv_id, int uniqueid, int tt_id, DateTime timenav, double lat, double lon, int speed, int course, int inv)
+    protected void add(int srv_id, int uniqueid, int tt_id, DateTime timenav, double lat, double lon, int speed, int course, int inv, String statenum)
     {
         if (correct_transport_type && (tt_id == 2 || tt_id == 3))
             tt_id = 1;
         Integer transport_type = transport_types.get(tt_id);
         if (transport_type == null)
             return;
-        units.add(new Units(srv_id, uniqueid, transport_type, timenav, lat, lon, speed, course, inv));
+        statenum = statenum.replaceAll("\\s+", "").toUpperCase();
+        units.add(new Units(srv_id, uniqueid, transport_type, timenav, lat, lon, speed, course, inv, statenum));
     }
 
     public ArrayList<Units> get()

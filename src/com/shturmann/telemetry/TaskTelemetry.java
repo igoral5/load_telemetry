@@ -121,6 +121,14 @@ public class TaskTelemetry extends TaskGeneral
                     String value = String.format(Locale.US, "%s,%f,%f,%d,%d,%d,%d,%s,%s,%s", fmt.print(unit.timenav), unit.lat, unit.lon, unit.speed, unit.course, unit.transport_type, unit.inv, name, fmt.print(this.start_update), fmt.print(new DateTime()));
                     pipe.set(key, value);
                     pipe.expire(key, time_live);
+                    key = String.format(Locale.US, "sip:%s:statenum:%s", prefix_redis, unit.statenum);
+                    value = String.format(Locale.US, "%d:%d:%d", group_code, unit.srv_id, unit.uniqueid);
+                    pipe.set(key, value);
+                    pipe.expire(key, time_live);
+                    key = String.format(Locale.US, "sip:%s:uniqueid:%d:%d:%d", prefix_redis, group_code, unit.srv_id, unit.uniqueid);
+                    value = String.format(Locale.US, "%d:%d:%d", group_code, nariad_one.mr_id, nariad_one.direction);
+                    pipe.set(key, value);
+                    pipe.expire(key, time_live);
                     Telemetry telemetry = new Telemetry();
                     telemetry.route = String.format(Locale.US, "%d:%d:%d", group_code, nariad_one.mr_id, nariad_one.direction);
                     telemetry.name = name;

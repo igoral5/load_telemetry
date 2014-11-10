@@ -16,7 +16,9 @@ public class Units
     public int speed;
     public int course;
     public int inv;
-    public Units(int srv_id, int uniqueid, int transport_type, DateTime timenav, double lat, double lon, int speed, int course, int inv)
+    public String statenum;
+
+    public Units(int srv_id, int uniqueid, int transport_type, DateTime timenav, double lat, double lon, int speed, int course, int inv, String statenum)
     {
         this.srv_id = srv_id;
         this.uniqueid = uniqueid;
@@ -27,6 +29,7 @@ public class Units
         this.speed = speed;
         this.course = course;
         this.inv = inv;
+        this.statenum = statenum;
     }
 
 }

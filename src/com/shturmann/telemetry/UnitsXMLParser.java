@@ -34,7 +34,7 @@ public class UnitsXMLParser extends UnitsParser
             int course = Integer.valueOf(attributes.getValue("u_course"));
             int tt_id = Integer.valueOf(attributes.getValue("tt_id"));
             int inv = Integer.valueOf(attributes.getValue("u_inv"));
-            add(srv_id, uniqueid, tt_id, u_timenav, lat, lon, speed, course, inv);
+            add(srv_id, uniqueid, tt_id, u_timenav, lat, lon, speed, course, inv, attributes.getValue("u_statenum"));
         }
     }
 }
