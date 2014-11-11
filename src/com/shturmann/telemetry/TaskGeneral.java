@@ -8,6 +8,7 @@ import org.slf4j.MarkerFactory;
 import redis.clients.jedis.JedisPool;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -74,10 +75,10 @@ abstract public class TaskGeneral extends TimerTask
                 }
                 sysinfo = future_sysinfo.get();
                 log(String.format("request getSysInfo completed %d ms", System.currentTimeMillis() - begin_update), 2);
-                if (old_update == null || sysinfo.get_last_update().isAfter(old_update))
+                if (old_update == null || get_update_time().isAfter(old_update))
                 {
                     process_update();
-                    old_update = sysinfo.get_last_update();
+                    old_update = get_update_time();
                     log(String.format("finish update %d ms", System.currentTimeMillis() - begin_update), 1);
                 }
                 else
@@ -146,4 +147,6 @@ abstract public class TaskGeneral extends TimerTask
     }
 
     abstract void process_update() throws Exception;
+
+    abstract DateTime get_update_time();
 }

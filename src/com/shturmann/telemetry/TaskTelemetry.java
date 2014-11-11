@@ -221,4 +221,12 @@ public class TaskTelemetry extends TaskGeneral
         log(String.format(Locale.US, "delay %s ms for synchro", delay), 1);
         Thread.sleep(delay);
     }
+
+    @Override
+    DateTime get_update_time()
+    {
+        if (sysinfo != null)
+            return sysinfo.get_nav_update();
+        return new DateTime(0);
+    }
 }

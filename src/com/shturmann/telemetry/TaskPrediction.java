@@ -2,6 +2,7 @@ package com.shturmann.telemetry;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.MarkerFactory;
 import redis.clients.jedis.Jedis;
@@ -140,5 +141,13 @@ public class TaskPrediction extends TaskGeneral
         {
             logger.info(MarkerFactory.getMarker("nagios"), String.format(Locale.US, "%s Получено %d прогнозов за %d мс", worker_name, post.size(), System.currentTimeMillis() - begin_update));
         }
+    }
+
+    @Override
+    DateTime get_update_time()
+    {
+        if (sysinfo != null)
+            return sysinfo.get_last_update();
+        return new DateTime(0);
     }
 }

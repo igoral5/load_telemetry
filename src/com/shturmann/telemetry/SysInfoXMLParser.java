@@ -17,7 +17,16 @@ public class SysInfoXMLParser extends SysInfoParser
         {
             DateTime sys_time = fmt.parseDateTime(attributes.getValue("SysTime"));
             DateTime last_upadte = fmt.parseDateTime(attributes.getValue("LastUpdateTime"));
-            set(sys_time, last_upadte);
+            DateTime nav_update;
+            if (attributes.getValue("NavUpdateTime") != null)
+            {
+                nav_update = fmt.parseDateTime(attributes.getValue("NavUpdateTime"));
+            }
+            else
+            {
+                nav_update = new DateTime(0);
+            }
+            set(sys_time, last_upadte, nav_update);
         }
     }
 }
